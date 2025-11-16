@@ -1,0 +1,22 @@
+:root {
+  --color-button-bg: #ffffff;
+  --color-button-bg-hover: #f4f4f4;
+
+  --box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
+}
+
+.position-absolute {
+  position: absolute !important;
+}
+
+.border-none {
+  border: none !important;
+}
+
+.border-radius-small {
+  border-radius: 5px !important;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}

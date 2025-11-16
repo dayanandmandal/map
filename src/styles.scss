@@ -2,3 +2,23 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+// leaflet scss
+.leaflet-touch .leaflet-bar {
+  border: none !important;
+  border-radius: 5px;
+  box-shadow: var(--box-shadow) !important;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 20px !important;
+}
+
+.leaflet-bottom .leaflet-control {
+  margin-bottom: 10px !important;
+}
+
+.leaflet-bar a:hover,
+.leaflet-bar a:focus {
+  background-color: var(--color-button-bg-hover);
+}
