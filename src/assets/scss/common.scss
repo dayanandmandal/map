@@ -1,6 +1,14 @@
 :root {
-  --color-button-bg: #ffffff;
-  --color-button-bg-hover: #f4f4f4;
+  --primary-color: #007bff;
+  --primary-color-hover: #0056b3;
+  --input-border-color: #ccc;
+  --input-focus-border-color: #007bff;
+  --button-text-color: #fff;
+  --button-bg-color: #007bff;
+  --button-bg-hover-color: #0056b3;
+
+  --background-color: #ffffff;
+  --background-color-hover: #e8e9ea;
 
   --box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
 }

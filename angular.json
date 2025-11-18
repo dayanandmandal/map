@@ -55,12 +55,18 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "define": {
+                "APP_CONFIG.apiKey": "'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjkwNDhlZjBkMGE2YjQxYThiMDEyODI4OWNjNTBlMmIyIiwiaCI6Im11cm11cjY0In0='"
+              }
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "define": {
+                "APP_CONFIG.apiKey": "'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjkwNDhlZjBkMGE2YjQxYThiMDEyODI4OWNjNTBlMmIyIiwiaCI6Im11cm11cjY0In0='"
+              }
             }
           },
           "defaultConfiguration": "production"

@@ -1,11 +1,12 @@
 import { AfterViewInit, Component } from '@angular/core';
 import * as L from 'leaflet';
 import { UserLocatorComponent } from '../user-locator/user-locator.component';
+import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'map-view',
   standalone: true,
-  imports: [UserLocatorComponent],
+  imports: [UserLocatorComponent, SearchComponent],
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss',
 })

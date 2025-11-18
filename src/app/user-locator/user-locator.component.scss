@@ -2,12 +2,12 @@
   z-index: 1000;
   bottom: 100px;
   right: 20px;
-  background: var(--color-button-bg);
+  background: var(--background-color);
   padding: 5px 10px;
   box-shadow: var(--box-shadow);
 
   &:hover,
   &:focus {
-    background-color: var(--color-button-bg-hover);
+    background-color: var(--background-color-hover);
   }
 }
