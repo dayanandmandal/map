@@ -55,7 +55,8 @@ export class OrsSearchService {
         region: properties.region,
         city: properties.locality || properties.city,
         postcode: properties.postcode,
-        coordinates: [lat, lng],
+        latitude: lat,
+        longitude: lng,
       } as OrsPlace;
     });
   }

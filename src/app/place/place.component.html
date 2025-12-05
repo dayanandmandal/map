@@ -1,0 +1,12 @@
+<div class="place-wrap position-relative">
+  <map-search
+    class="search"
+    [map]="map"
+    (selectedResult)="
+      placeDetails = $event;
+      addPlaceDetailsInUrl($event);
+      setViewAndMarker($event)
+    "
+    [value]="placeDetails | resultValue"
+  ></map-search>
+</div>

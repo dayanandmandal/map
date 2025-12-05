@@ -2,11 +2,6 @@
   <div id="map-container">
     <map-user-locator [map]="map"></map-user-locator>
     <router-outlet></router-outlet>
-    <map-search
-      class="search"
-      [map]="map"
-      *ngIf="!isDirectionalMode"
-    ></map-search>
     <div
       class="direction-wrap cursor-pointer box-shadow"
       [class.active]="isDirectionalMode"

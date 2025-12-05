@@ -18,9 +18,8 @@ export class MapCoreService {
     return this.initService.initializeMap(element, position);
   }
 
-  public markLocation(map: L.Map, position: GeoPoint, title: string) {
-    // Delegates drawing, passing the map instance
-    this.markerService.addMarker(map, position, title);
+  public markLocation(map: L.Map, position: GeoPoint, title: string): L.Marker {
+    return this.markerService.addMarker(map, position, title);
   }
 
   public fetchUserLocation() {

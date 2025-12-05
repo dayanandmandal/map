@@ -5,7 +5,8 @@ export interface OrsPlace {
   region?: string;
   city?: string;
   postcode?: string;
-  coordinates: [number, number];
+  latitude: number;
+  longitude: number;
 }
 
 export interface GeoPoint {
@@ -27,3 +28,4 @@ export interface MapState {
 }
 
 export type MapModel = L.Map | null;
+export type OrsPlaceModel = OrsPlace | null;

@@ -1,13 +1,13 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import * as L from 'leaflet';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserLocatorComponent } from '../user-locator/user-locator.component';
 import { SearchComponent } from '../search/search.component';
 import { DirectionComponent } from '../direction/direction.component';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MapCoreService } from '../services/map-core.service';
 import { MapModel, MapQueryParams } from '../model/model';
 import { filter, Subject, takeUntil } from 'rxjs';
+import { NavigationStatusService } from '../services/navigation-status.service';
 
 @Component({
   selector: 'map-view',
@@ -30,7 +30,7 @@ export class ViewComponent implements OnInit, OnDestroy {
   constructor(
     private mapCoreService: MapCoreService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private navigationStatusService: NavigationStatusService
   ) {}
 
   ngOnInit(): void {
@@ -57,14 +57,34 @@ export class ViewComponent implements OnInit, OnDestroy {
       .subscribe((mapInstance) => {
         this.map = mapInstance;
         this.addMapMoveListener();
+        this.checkNavigationOngoingAndCallUpdateUrlMethod();
       });
   }
 
   private addMapMoveListener(): void {
     if (this.map) {
       this.map.on('moveend', () => {
-        this.updateUrlWithMapView();
+        this.checkNavigationOngoingAndCallUpdateUrlMethod();
       });
+    }
+  }
+
+  checkNavigationOngoingAndCallUpdateUrlMethod(count: number = 0): void {
+    // if angular recieves navigation request while other navigation is in progress,
+    // it discard the previous navigation request
+    // calling inside setTimeout to ensure navigation of child components completes
+    // before our navigation to update the quryparams in url
+
+    if (this.navigationStatusService.isNavigationOngoing && count < 10) {
+      setTimeout(() => {
+        this.checkNavigationOngoingAndCallUpdateUrlMethod(count + 1);
+      }, 200);
+    } else if (count >= 10) {
+      console.warn(
+        'Could not update URL with map view as navigation is ongoing for too long.'
+      );
+    } else {
+      this.updateUrlWithMapView();
     }
   }
 
@@ -82,7 +102,6 @@ export class ViewComponent implements OnInit, OnDestroy {
 
     // Update the URL using Angular Router
     this.router.navigate([], {
-      relativeTo: this.activatedRoute,
       queryParams: queryParams,
       queryParamsHandling: 'merge',
       replaceUrl: true,

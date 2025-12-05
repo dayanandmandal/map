@@ -8,11 +8,12 @@ import { GeoPoint } from '../model/model';
 export class MarkerService {
   constructor() {}
 
-  public addMarker(map: L.Map, position: GeoPoint, title: string) {
+  public addMarker(map: L.Map, position: GeoPoint, title: string): L.Marker {
     title = title || 'Selected Location';
-    L.marker([position.latitude, position.longitude])
-      .addTo(map)
-      .bindPopup(title)
-      .openPopup();
+
+    const markerLayer = L.marker([position.latitude, position.longitude]);
+    markerLayer.addTo(map).bindPopup(title).openPopup();
+
+    return markerLayer;
   }
 }
