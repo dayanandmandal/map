@@ -1,0 +1,11 @@
+<div id="search-result">
+  <div
+    class="result-item cursor-pointer"
+    (click)="emitResult(r)"
+    *ngFor="let r of results"
+  >
+    <strong>{{ r.name }}</strong>
+    <br />
+    {{ r.label || "" }}
+  </div>
+</div>

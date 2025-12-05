@@ -1,25 +1,22 @@
 <div class="search-wrap">
-  <span class="search-box">
+  <span class="search-box position-relative">
     <input
       type="text"
       id="search-input"
       placeholder="Search for a location..."
       [(ngModel)]="searchTerm"
       (keyup.enter)="search()"
+      [disabled]="!map"
     />
     <div class="search-icon cursor-pointer" (click)="search()">
       <ng-container *ngTemplateOutlet="searchTemplate"></ng-container>
     </div>
   </span>
-  <div id="search-result">
-    <div class="result-item cursor-pointer"
-    (click)="addMarker(r)"
-    *ngFor="let r of searchResult">
-      <strong>{{ r.name }}</strong>
-      <br />
-      {{ r.label || "" }}
-    </div>
-  </div>
+  <map-serch-result-list
+    [results]="searchResult"
+    (selectedResult)="setInputValue($event); addMarker($event)"
+    *ngIf="showResults"
+  ></map-serch-result-list>
 </div>
 
 <ng-template #searchTemplate>

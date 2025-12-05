@@ -8,12 +8,6 @@ export class OrsSearchService {
   private readonly baseUrl = 'https://api.openrouteservice.org/geocode/search';
   private readonly apiKey: string = APP_CONFIG.apiKey;
 
-  /**
-   * Searches for places based on a query string.
-   * @param query The place name, address, or partial text to search for.
-   * @param limit The maximum number of results to return (default is 5).
-   * @returns A Promise that resolves to an array of OrsPlace objects.
-   */
   async searchPlaces(query: string, limit: number = 10): Promise<OrsPlace[]> {
     if (!query || query.length < 3) {
       return [];
@@ -44,19 +38,14 @@ export class OrsSearchService {
     }
   }
 
-  /**
-   * Internal helper to map the raw ORS response structure to our clean OrsPlace interface.
-   * @param data The raw JSON response from the ORS API.
-   * @returns An array of mapped OrsPlace objects.
-   */
   private mapOrsResponse(data: any): OrsPlace[] {
     if (!data.features || data.features.length === 0) {
       return [];
     }
 
     return data.features.map((feature: any) => {
-      // ORS coordinates are in [lon, lat] format
-      const [lon, lat] = feature.geometry.coordinates;
+      // ORS coordinates are in [lng, lat] format
+      const [lng, lat] = feature.geometry.coordinates;
       const properties = feature.properties;
 
       return {
@@ -66,7 +55,7 @@ export class OrsSearchService {
         region: properties.region,
         city: properties.locality || properties.city,
         postcode: properties.postcode,
-        coordinates: [lon, lat], // [longitude, latitude]
+        coordinates: [lat, lng],
       } as OrsPlace;
     });
   }

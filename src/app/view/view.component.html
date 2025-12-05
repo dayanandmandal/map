@@ -1,6 +1,45 @@
-<div class="view-wrap">
+<div class="view-wrap" (click)="$event.stopPropagation()">
   <div id="map-container">
     <map-user-locator [map]="map"></map-user-locator>
-    <map-search [map]="map"></map-search>
+    <router-outlet></router-outlet>
+    <map-search
+      class="search"
+      [map]="map"
+      *ngIf="!isDirectionalMode"
+    ></map-search>
+    <div
+      class="direction-wrap cursor-pointer box-shadow"
+      [class.active]="isDirectionalMode"
+      (click)="isDirectionalMode = !isDirectionalMode"
+      *ngIf="!isDirectionalMode"
+    >
+      <ng-container *ngTemplateOutlet="directionIconTemplate"></ng-container>
+    </div>
+    <map-direction
+      [map]="map"
+      (close)="isDirectionalMode = false"
+      *ngIf="isDirectionalMode"
+    ></map-direction>
   </div>
 </div>
+
+<ng-template #directionIconTemplate>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    version="1.0"
+    width="21px"
+    height="20px"
+    viewBox="0 0 272.000000 259.000000"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <g
+      transform="translate(0.000000,259.000000) scale(0.100000,-0.100000)"
+      fill="#000000"
+      stroke="none"
+    >
+      <path
+        d="M737 1914 c-334 -334 -606 -608 -605 -610 2 -2 275 -276 607 -609 l605 -605 39 37 c186 182 1170 1172 1170 1178 0 6 -984 996 -1170 1178 l-39 37 -607 -606z m1243 -489 c0 -6 -90 -100 -200 -210 l-200 -200 0 143 0 142 -235 0 -235 0 0 -175 0 -175 -115 0 -115 0 0 295 0 295 348 2 347 3 3 145 3 144 199 -199 c110 -110 200 -204 200 -210z"
+      />
+    </g>
+  </svg>
+</ng-template>

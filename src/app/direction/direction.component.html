@@ -1,0 +1,42 @@
+<div class="direction-wrap box-shadow border-radius-small">
+  <div
+    class="close-icon position-absolute cursor-pointer"
+    (click)="closeDirection()"
+  >
+    <ng-container *ngTemplateOutlet="closeIconTemplate"></ng-container>
+  </div>
+  <map-search
+    [showResults]="false"
+    (searchResult)="setSearchResults($event)"
+    [value]="selectedResults[0] | resultValue"
+    (click)="activeInputIndex = 0"
+  ></map-search>
+  <map-search
+    [showResults]="false"
+    (searchResult)="setSearchResults($event)"
+    [value]="selectedResults[1] | resultValue"
+    (click)="activeInputIndex = 1"
+    class="mt-r0-5"
+  ></map-search>
+  <map-serch-result-list
+    [results]="searchResults"
+    (selectedResult)="handleSearchResults($event)"
+  ></map-serch-result-list>
+</div>
+
+<ng-template #closeIconTemplate>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    height="24px"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <line x1="18" y1="6" x2="6" y2="18" />
+
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+</ng-template>

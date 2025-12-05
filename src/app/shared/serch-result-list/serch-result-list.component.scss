@@ -1,0 +1,13 @@
+#search-result {
+  background: var(--background-color);
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+  border-radius: 5px;
+  .result-item {
+    border-bottom: 1px solid var(--input-border-color);
+    padding: 8px 12px;
+    &:hover {
+      background-color: var(--hover-background-color);
+    }
+  }
+}

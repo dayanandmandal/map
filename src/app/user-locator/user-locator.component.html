@@ -1,7 +1,7 @@
 <button
-  class="locate-button position-absolute border-none border-radius-small cursor-pointer"
+  class="locate-button position-absolute border-none border-radius-small cursor-pointer box-shadow"
   (click)="focusOnLocation()"
-  *ngIf="map"
+  [disabled]="!map"
 >
   📍
 </button>
