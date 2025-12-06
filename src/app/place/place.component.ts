@@ -53,7 +53,7 @@ export class PlaceComponent implements OnInit, OnDestroy {
     }
 
     if (this.placeDetails) {
-      this.setViewAndMarker(this.placeDetails);
+      this.addMarker(this.placeDetails);
     }
     console.log('Parsed Place Details:', this.placeDetails);
   }
@@ -68,13 +68,15 @@ export class PlaceComponent implements OnInit, OnDestroy {
     });
   }
 
-  setViewAndMarker(placeDetails: OrsPlace) {
+  setView(placeDetails: OrsPlace) {
     const coordinates: [number, number] = [
       placeDetails.latitude,
       placeDetails.longitude,
     ];
     this.map?.setView(coordinates, 15);
+  }
 
+  addMarker(placeDetails: OrsPlace) {
     const locatinPoint: GeoPoint = {
       latitude: placeDetails.latitude,
       longitude: placeDetails.longitude,

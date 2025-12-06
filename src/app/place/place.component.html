@@ -5,7 +5,8 @@
     (selectedResult)="
       placeDetails = $event;
       addPlaceDetailsInUrl($event);
-      setViewAndMarker($event)
+      addMarker($event);
+      setView($event)
     "
     [value]="placeDetails | resultValue"
   ></map-search>

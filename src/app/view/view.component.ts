@@ -3,7 +3,7 @@ import { UserLocatorComponent } from '../user-locator/user-locator.component';
 import { SearchComponent } from '../search/search.component';
 import { DirectionComponent } from '../direction/direction.component';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MapCoreService } from '../services/map-core.service';
 import { MapModel, MapQueryParams } from '../model/model';
 import { filter, Subject, takeUntil } from 'rxjs';
@@ -30,7 +30,8 @@ export class ViewComponent implements OnInit, OnDestroy {
   constructor(
     private mapCoreService: MapCoreService,
     private router: Router,
-    private navigationStatusService: NavigationStatusService
+    private navigationStatusService: NavigationStatusService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -56,8 +57,26 @@ export class ViewComponent implements OnInit, OnDestroy {
       )
       .subscribe((mapInstance) => {
         this.map = mapInstance;
+        this.readParamsAndSetView();
         this.addMapMoveListener();
         this.checkNavigationOngoingAndCallUpdateUrlMethod();
+      });
+  }
+
+  private readParamsAndSetView(): void {
+    this.activatedRoute.queryParams
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((params) => params['latitude'] && params['longitude'])
+      )
+      .subscribe((params) => {
+        const lat = parseFloat(params['latitude']);
+        const lng = parseFloat(params['longitude']);
+        const zoom = parseInt(params['zoom'], 10) || 15; // Default zoom to 15 if missing
+
+        if (!isNaN(lat) && !isNaN(lng)) {
+          this.map?.setView([lat, lng], zoom);
+        }
       });
   }
 
