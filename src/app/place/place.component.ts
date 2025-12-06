@@ -19,6 +19,7 @@ export class PlaceComponent implements OnInit, OnDestroy {
   map: MapModel = null;
   markerLayer: L.Marker | null = null;
   private destroy$ = new Subject<void>();
+  isInitialLoad: boolean = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -29,7 +30,6 @@ export class PlaceComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscribeToGetMapInstance();
-    this.getPlaceDetailsFromUrl();
   }
 
   subscribeToGetMapInstance() {
@@ -41,34 +41,60 @@ export class PlaceComponent implements OnInit, OnDestroy {
       )
       .subscribe((mapInstance) => {
         this.map = mapInstance;
+        this.subscribeToPlaceDetailsChange();
       });
   }
 
-  getPlaceDetailsFromUrl() {
-    const placeDetails =
-      this.activatedRoute.snapshot.paramMap.get('placeDetails');
+  subscribeToPlaceDetailsChange() {
+    this.activatedRoute.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        const placeDetailsParam = params.get('placeDetails');
+        let newDetails: OrsPlaceModel = null;
 
-    if (placeDetails) {
-      this.placeDetails = this.utilService.parsePlaceDetails(placeDetails);
-    }
+        if (placeDetailsParam && placeDetailsParam !== 'null') {
+          newDetails = this.utilService.parsePlaceDetails(placeDetailsParam);
+        }
 
-    if (this.placeDetails) {
-      this.addMarker(this.placeDetails);
-    }
-    console.log('Parsed Place Details:', this.placeDetails);
+        this.placeDetails = newDetails;
+
+        this.removeMarker();
+
+        if (this.map && this.placeDetails) {
+          this.addMarker(this.placeDetails);
+          // when user comes to this direct with placDetails, view is set by view component
+          // based on query params longitude, latitude, zoom.
+          // here we only want to change view when user serach and select new place
+          if (!this.isInitialLoad) this.setView(this.placeDetails);
+        }
+
+        this.isInitialLoad = false;
+      });
   }
 
-  addPlaceDetailsInUrl(placeDetails: OrsPlace) {
+  removeMarker() {
+    if (this.markerLayer) {
+      this.markerLayer.remove();
+      this.markerLayer = null;
+    }
+  }
+
+  addPlaceDetailsInUrl(placeDetails: OrsPlaceModel) {
     const formattedDetails = this.utilService.formatPlaceDetails(placeDetails);
     const path = `/place/${formattedDetails}`;
+    this.route(path);
+  }
 
+  route(path: string) {
     this.router.navigate([path], {
       queryParamsHandling: 'preserve',
       replaceUrl: true,
     });
   }
 
-  setView(placeDetails: OrsPlace) {
+  setView(placeDetails: OrsPlaceModel) {
+    if (!placeDetails) return;
+
     const coordinates: [number, number] = [
       placeDetails.latitude,
       placeDetails.longitude,
@@ -76,18 +102,20 @@ export class PlaceComponent implements OnInit, OnDestroy {
     this.map?.setView(coordinates, 15);
   }
 
-  addMarker(placeDetails: OrsPlace) {
+  addMarker(placeDetails: OrsPlaceModel) {
+    if (!placeDetails) return;
+
     const locatinPoint: GeoPoint = {
       latitude: placeDetails.latitude,
       longitude: placeDetails.longitude,
       accuracy: null,
     };
 
-    this.markerLayer?.remove();
     this.markerLayer = this.mapCoreService.markLocation(
       this.map!,
       locatinPoint,
-      placeDetails.name
+      placeDetails.name,
+      false
     );
   }
 

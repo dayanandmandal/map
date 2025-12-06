@@ -2,12 +2,7 @@
   <map-search
     class="search"
     [map]="map"
-    (selectedResult)="
-      placeDetails = $event;
-      addPlaceDetailsInUrl($event);
-      addMarker($event);
-      setView($event)
-    "
-    [value]="placeDetails | resultValue"
+    (selectedResult)="placeDetails = $event; addPlaceDetailsInUrl($event)"
+    [result]="placeDetails"
   ></map-search>
 </div>

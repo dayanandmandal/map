@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MapCoreService } from '../services/map-core.service';
 import { MapModel, MapQueryParams } from '../model/model';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { filter, Subject, take, takeUntil } from 'rxjs';
 import { NavigationStatusService } from '../services/navigation-status.service';
 
 @Component({
@@ -66,8 +66,8 @@ export class ViewComponent implements OnInit, OnDestroy {
   private readParamsAndSetView(): void {
     this.activatedRoute.queryParams
       .pipe(
-        takeUntil(this.destroy$),
-        filter((params) => params['latitude'] && params['longitude'])
+        filter((params) => params['latitude'] && params['longitude']),
+        take(1)
       )
       .subscribe((params) => {
         const lat = parseFloat(params['latitude']);

@@ -2,15 +2,21 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OrsSearchService } from '../services/ors-search.service';
-import { GeoPoint, MapModel, OrsPlace } from '../model/model';
+import { GeoPoint, MapModel, OrsPlace, OrsPlaceModel } from '../model/model';
 import { SerchResultListComponent } from '../shared/serch-result-list/serch-result-list.component';
 import { UtilService } from '../services/util.service';
 import { MapCoreService } from '../services/map-core.service';
+import { ResultValuePipe } from '../shared/pipes/result-value.pipe';
 
 @Component({
   selector: 'map-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, SerchResultListComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    SerchResultListComponent,
+  ],
+  providers: [ResultValuePipe],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
@@ -20,17 +26,22 @@ export class SearchComponent {
   searchResult: Array<OrsPlace> = [];
   @Output('searchResult') searchResultEmitter: EventEmitter<Array<OrsPlace>> =
     new EventEmitter<Array<OrsPlace>>();
-  @Output('selectedResult') selectedResultEmitter: EventEmitter<OrsPlace> =
-    new EventEmitter<OrsPlace>();
+  @Output('selectedResult')
+  selectedResultEmitter: EventEmitter<OrsPlace | null> =
+    new EventEmitter<OrsPlace | null>();
   @Input() showResults: boolean = true;
-  @Input() set value(value: string | undefined) {
-    this.searchTerm = value || '';
+  selectedPlace: OrsPlaceModel = null;
+  @Input() set result(value: OrsPlaceModel) {
+    if (value) {
+      this.searchTerm = this.resultValuePipe.transform(value);
+      this.selectedPlace = value;
+    }
   }
 
   constructor(
     public searchService: OrsSearchService,
     public utilService: UtilService,
-    private mapCoreService: MapCoreService
+    private resultValuePipe: ResultValuePipe
   ) {}
 
   async search() {
@@ -40,29 +51,14 @@ export class SearchComponent {
 
   setInputValue(selectedResult: OrsPlace) {
     this.searchTerm = selectedResult.name || selectedResult.label;
+    this.selectedPlace = selectedResult;
     this.selectedResultEmitter.emit(selectedResult);
   }
 
-  setViewAndAddMarker(selectedResult: OrsPlace) {
-    const coordinates: [number, number] = [
-      selectedResult.latitude,
-      selectedResult.longitude,
-    ];
-    this.map?.setView(coordinates, 14);
-
-    const locationPoint: GeoPoint = {
-      latitude: selectedResult.latitude,
-      longitude: selectedResult.longitude,
-      accuracy: null,
-    };
-
-    this.mapCoreService.markLocation(
-      this.map!,
-      locationPoint,
-      selectedResult.name
-    );
-
-    this.clearSearch();
+  clearInput() {
+    this.searchTerm = '';
+    this.selectedPlace = null;
+    this.selectedResultEmitter.emit(null);
   }
 
   clearSearch() {

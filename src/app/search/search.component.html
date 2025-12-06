@@ -8,13 +8,22 @@
       (keyup.enter)="search()"
       [disabled]="!map"
     />
-    <div class="search-icon cursor-pointer" (click)="search()">
-      <ng-container *ngTemplateOutlet="searchTemplate"></ng-container>
+    <div class="action-wrap position-absolute">
+      <div
+        class="clear-icon cursor-pointer"
+        (click)="clearInput()"
+        *ngIf="selectedPlace"
+      >
+        <ng-container *ngTemplateOutlet="clearTemplate"></ng-container>
+      </div>
+      <div class="search-icon cursor-pointer" (click)="search()">
+        <ng-container *ngTemplateOutlet="searchTemplate"></ng-container>
+      </div>
     </div>
   </span>
   <map-serch-result-list
     [results]="searchResult"
-    (selectedResult)="setInputValue($event); setViewAndAddMarker($event)"
+    (selectedResult)="setInputValue($event); clearSearch()"
     *ngIf="showResults"
   ></map-serch-result-list>
 </div>
@@ -27,12 +36,42 @@
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    stroke-width="2"
+    stroke-width="3"
     stroke-linecap="round"
     stroke-linejoin="round"
     class="feather feather-search"
   >
     <circle cx="11" cy="11" r="8"></circle>
     <line x1="23" y1="23" x2="16.65" y2="16.65"></line>
+  </svg>
+</ng-template>
+
+<ng-template #clearTemplate>
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <line
+      x1="4"
+      y1="4"
+      x2="20"
+      y2="20"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+
+    <line
+      x1="20"
+      y1="4"
+      x2="4"
+      y2="20"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
   </svg>
 </ng-template>

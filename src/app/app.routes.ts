@@ -2,9 +2,9 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '', 
+    path: '',
     redirectTo: 'place/null', // null is a placeholder for no place details
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'place/:placeDetails',

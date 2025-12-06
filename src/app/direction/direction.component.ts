@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SearchComponent } from '../search/search.component';
-import { MapModel, OrsPlace } from '../model/model';
+import { MapModel, OrsPlace, OrsPlaceModel } from '../model/model';
 import { SerchResultListComponent } from '../shared/serch-result-list/serch-result-list.component';
 import { ResultValuePipe } from '../shared/pipes/result-value.pipe';
 
@@ -21,7 +21,7 @@ export class DirectionComponent {
   @Input() map: MapModel = null;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   searchResults: Array<OrsPlace> = [];
-  selectedResults: Array<OrsPlace> = [];
+  selectedResults: Array<OrsPlaceModel> = [];
   activeInputIndex: number = 0;
 
   setSearchResults(results: Array<OrsPlace>) {

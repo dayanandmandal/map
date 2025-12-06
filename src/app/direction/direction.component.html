@@ -8,13 +8,13 @@
   <map-search
     [showResults]="false"
     (searchResult)="setSearchResults($event)"
-    [value]="selectedResults[0] | resultValue"
+    [result]="selectedResults[0]"
     (click)="activeInputIndex = 0"
   ></map-search>
   <map-search
     [showResults]="false"
     (searchResult)="setSearchResults($event)"
-    [value]="selectedResults[1] | resultValue"
+    [result]="selectedResults[1]"
     (click)="activeInputIndex = 1"
     class="mt-r0-5"
   ></map-search>

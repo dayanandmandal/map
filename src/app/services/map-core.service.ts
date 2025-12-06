@@ -18,8 +18,13 @@ export class MapCoreService {
     return this.initService.initializeMap(element, position);
   }
 
-  public markLocation(map: L.Map, position: GeoPoint, title: string): L.Marker {
-    return this.markerService.addMarker(map, position, title);
+  public markLocation(
+    map: L.Map,
+    position: GeoPoint,
+    title: string,
+    openPopup: boolean = true
+  ): L.Marker {
+    return this.markerService.addMarker(map, position, title, openPopup);
   }
 
   public fetchUserLocation() {
